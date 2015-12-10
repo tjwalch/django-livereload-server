@@ -1,0 +1,14 @@
+language: python
+python:
+- '2.7'
+- '3.4'
+script: nosetests
+deploy:
+  provider: pypi
+  user: Tomas.Walch
+  password:
+    secure: tS5xcmgEv5tf55PTSGZKRt0kRU0QjcVmQOZ3yN3+80tAM/0AC3YrUBs5AFUjRMzhx/yd9jaTZxYoMO1NYpEDcOeUXGDazTXsd7nb6A7sc6yWzWUCWmHhc1HSf/7GdRoiTHrpthCkMcDZ9cQemuuN8yHpAZteT/XSjBebJOWG0URJe8y7vsVzn9bDP+NRHQyrqaYD2lFKjLIx8i0UiWWdjnB7huAN+LCVTnjoeu85GA1Q97kCt5YuZel/W/PhL4vvDWLNV37DYMrxnjDSYfEvafcYiXSqw9CV1cJF2jnNKP+d+0wzSMK66MA85axR0ZInBuqsygGEN+apojBVp+erOHQ4SE0ODaEpNRyCEIgmSEVSarJKGq3JMc3xkGnq0cle2DdUs7M93Ay4Prk+vMjqNuVWpDLAtCmfTl4Nt29XK6uUiZ0a4zW3GO24qRHzg0vl+8pUJ7LAqChfr4C1TnbF5VuB//2EMzP6R7PcIzt9f4dEhPLlj+U8zBWrcrLqQ+ul9+Qs5fTwFROwEeti+19v45nW4IeumPgck5L/89jOzkJo/xqkqlN7vOO6RVIg0UF8QHHkAXEycGDB4s405ocSkHnSBGJZMlcZy5+jcxE+2MxfzDDQJ3l6v8B/eP+unaQAvyhKa/849CFA0V/E8Kl1nrgqEnZuw0tOsfgqB+WRDBs=
+  on:
+    branch: master
+    tags: true
+    repo: tjwalch/django-livereload-server
