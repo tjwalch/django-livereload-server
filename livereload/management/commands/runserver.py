@@ -1,4 +1,5 @@
 """Runserver command with livereload"""
+import threading
 from optparse import make_option
 try:
     from urllib.request import urlopen
@@ -64,5 +65,5 @@ class Command(RunserverCommand):
         """
         handler = super(Command, self).get_handler(*args, **options)
         if options['use_livereload']:
-            self.livereload_request(**options)
+            threading.Timer(1, self.livereload_request, kwargs=options).start()
         return handler
