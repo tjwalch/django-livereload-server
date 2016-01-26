@@ -1,10 +1,9 @@
 import os
+import itertools
 from django.conf import settings
 from django.apps import apps
 from django.core.management.base import BaseCommand
-import itertools
-from livereload.server import Server
-from livereload import livereload_port
+from ... import livereload_port, server as S
 
 
 class Command(BaseCommand):
@@ -20,8 +19,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        server = Server()
+        server = S.Server()
 
+        #  The reason not to ask the staticfile finders to list the files is
+        # to get a watch when new files are added as well
         for dir in itertools.chain(
                 settings.STATICFILES_DIRS,
                 getattr(settings, 'TEMPLATE_DIRS', []),
