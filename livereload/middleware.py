@@ -4,6 +4,7 @@ Middleware for injecting the live-reload script.
 from bs4 import BeautifulSoup
 
 from django.utils.encoding import smart_str
+from django.conf import settings
 from livereload import livereload_port
 
 
@@ -13,9 +14,8 @@ class LiveReloadScript(object):
     """
 
     def process_response(self, request, response):
-        content_type = response.get(
-            'Content-Type', '').split(';')[0].strip().lower()
-        if content_type not in ['text/html', 'application/xhtml+xml']:
+        content_type = response.get('Content-Type', '').split(';')[0].strip().lower()
+        if content_type not in ['text/html', 'application/xhtml+xml'] or settings.DEBUG == False:
             return response
 
         soup = BeautifulSoup(
