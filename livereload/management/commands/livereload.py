@@ -17,6 +17,9 @@ class Command(BaseCommand):
             action='store',
             help='Extra files or directories to watch',
         )
+        parser.add_argument(
+            '--host', dest='host', default='127.0.0.1', help='Host address for livereload sever.'
+        )
 
     def handle(self, *args, **options):
         server = S.Server()
@@ -37,6 +40,6 @@ class Command(BaseCommand):
             server.watch(os.path.join(app_config.path, 'templates'))
 
         server.serve(
-            host='127.0.0.1',
+            host=options.get('host', '127.0.0.1'),
             liveport=livereload_port(),
         )
