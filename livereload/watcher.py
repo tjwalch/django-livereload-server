@@ -82,6 +82,8 @@ class Watcher(object):
         return self.filepath, delay
 
     def is_changed(self, path, ignore=None):
+        if isinstance(path, (list, tuple)):
+            path = path[1]
         if os.path.isfile(path):
             return self.is_file_changed(path, ignore)
         elif os.path.isdir(path):
