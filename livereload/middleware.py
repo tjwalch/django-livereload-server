@@ -10,12 +10,14 @@ from livereload import livereload_port
 
 class LiveReloadScript(object):
     """
-    Inject the live-reload script into your webpages.
+    Injects the live-reload script into your webpages.
     """
 
     def process_response(self, request, response):
         content_type = response.get('Content-Type', '').split(';')[0].strip().lower()
-        if content_type not in ['text/html', 'application/xhtml+xml'] or settings.DEBUG == False:
+        if (not settings.DEBUG or
+                content_type not in ['text/html', 'application/xhtml+xml'] or
+                not hasattr(response, 'content')):
             return response
 
         soup = BeautifulSoup(
