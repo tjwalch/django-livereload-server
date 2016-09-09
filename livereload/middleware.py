@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 from django.utils.encoding import smart_str
 from django.conf import settings
-from livereload import livereload_port
+from livereload import livereload_port, livereload_host
 
 
 class LiveReloadScript(object):
@@ -25,13 +25,17 @@ class LiveReloadScript(object):
             'html.parser',
         )
 
-        if not getattr(soup, 'head', None):
+        head = getattr(soup, 'head', None)
+        if not head:
             return response
 
         script = soup.new_tag(
-            'script', src='http://localhost:%d/livereload.js' % livereload_port(),
+            'script', src='http://%s:%d/livereload.js' % (
+                livereload_host(),
+                livereload_port(),
+            )
         )
-        soup.head.append(script)
+        head.append(script)
 
         response.content = str(soup)
 

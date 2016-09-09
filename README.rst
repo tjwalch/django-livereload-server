@@ -28,10 +28,12 @@ Add ``'livereload.middleware.LiveReloadScript'`` to the
         'livereload.middleware.LiveReloadScript',
     )
 
+This will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on.
+
 Configuration
 -------------
-If you need the livereload server to use a different port than the default 35729,
-specify it by setting ``LIVERELOAD_PORT`` in ``settings.py``.
+If you need the livereload server to use a different host and port than the default 127.0.0.1 and 35729,
+specify them by setting ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT`` in ``settings.py``.
 
 Usage
 -----
@@ -39,12 +41,14 @@ Start the livereload server with: ::
 
   $ ./manage.py livereload
 
-Extra files and/or paths to watch for changes can be added as positional arguments.
+Extra files and/or paths to watch for changes can be added as positional arguments. Host and port can be overridden with
+``--host`` and ``port`` options.
 
-Start the development server as usual with ``./manage.py runserver``. The command now accepts two additional
+Start the development server as usual with ``./manage.py runserver``. The command now accepts three additional
 options:
 
 * ``--nolivereload`` to disable livereload functionality
+* ``--livereload-host`` to override both default and settings file specified host address
 * ``--livereload-port`` to override both default and settings file specified port
 
 Background

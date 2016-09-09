@@ -1,5 +1,5 @@
 """django-livereload"""
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __license__ = 'BSD License'
 
 __author__ = 'Tomas Walch'
@@ -12,3 +12,7 @@ def livereload_port():
     from django.conf import settings
     return int(getattr(settings, 'LIVERELOAD_PORT', 35729))
 
+
+def livereload_host():
+    from django.conf import settings
+    return getattr(settings, 'LIVERELOAD_HOST', '127.0.0.1')

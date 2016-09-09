@@ -17,7 +17,7 @@ else:
     from django.core.management.commands.runserver import \
         Command as RunserverCommand
 
-from livereload import livereload_port
+from livereload import livereload_port, livereload_host
 
 
 class Command(RunserverCommand):
@@ -30,7 +30,12 @@ class Command(RunserverCommand):
                    ('--livereload-port',
                     {'action': 'store', 'dest': 'livereload_port', 'type': int,
                      'default': livereload_port(),
-                     'help': 'Port where LiveReload listen.'})]
+                     'help': 'Port where LiveReload listens.'}),
+                   ('--livereload-host',
+                    {'action': 'store', 'dest': 'livereload_host', 'type': str,
+                     'default': livereload_host(),
+                     'help': 'Address to LiveReload server.'})
+                   ]
 
     def add_arguments(self, parser):
         super(Command, self).add_arguments(parser)
@@ -51,7 +56,10 @@ class Command(RunserverCommand):
         """
         style = color_style()
         verbosity = int(options['verbosity'])
-        host = 'localhost:%s' % options['livereload_port']
+        host = '%s:%d' % (
+            options['livereload_host'],
+            options['livereload_port'],
+        )
         try:
             urlopen('http://%s/forcereload' % host)
             self.message('LiveReload request emitted.\n',

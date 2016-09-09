@@ -3,7 +3,7 @@ import itertools
 from django.conf import settings
 from django.apps import apps
 from django.core.management.base import BaseCommand
-from ... import livereload_port, server as S
+from ... import livereload_port, server as S, livereload_host
 
 
 class Command(BaseCommand):
@@ -18,7 +18,10 @@ class Command(BaseCommand):
             help='Extra files or directories to watch',
         )
         parser.add_argument(
-            '--host', dest='host', default='127.0.0.1', help='Host address for livereload sever.'
+            '--host', dest='host', default=livereload_host(), help='Host address for livereload sever.'
+        )
+        parser.add_argument(
+            '--port', dest='port', default=livereload_port(), help='Listening port for livereload sever.'
         )
 
     def handle(self, *args, **options):
@@ -40,6 +43,6 @@ class Command(BaseCommand):
             server.watch(os.path.join(app_config.path, 'templates'))
 
         server.serve(
-            host=options.get('host', '127.0.0.1'),
-            liveport=livereload_port(),
+            host=options['host'],
+            liveport=options['port'],
         )
