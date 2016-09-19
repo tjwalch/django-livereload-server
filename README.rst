@@ -20,13 +20,20 @@ Add ``'livereload'`` to the ``INSTALLED_APPS``, before ``'django.contrib.staticf
         ...
     )
 
-Add ``'livereload.middleware.LiveReloadScript'`` to the
+Add ``'livereload.middleware.LiveReloadScript'`` to
 ``MIDDLEWARE_CLASSES`` (probably at the end)::
 
     MIDDLEWARE_CLASSES = (
         ...
         'livereload.middleware.LiveReloadScript',
     )
+
+Or to ``MIDDLEWARE`` for Django >= 1.10::
+
+    MIDDLEWARE = [
+        ...
+        'livereload.middleware.LiveReloadScript',
+    ]
 
 This will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on.
 

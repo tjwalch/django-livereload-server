@@ -5,10 +5,15 @@ from bs4 import BeautifulSoup
 
 from django.utils.encoding import smart_str
 from django.conf import settings
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
+
 from livereload import livereload_port, livereload_host
 
 
-class LiveReloadScript(object):
+class LiveReloadScript(MiddlewareMixin):
     """
     Injects the live-reload script into your webpages.
     """
