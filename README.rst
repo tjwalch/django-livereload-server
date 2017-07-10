@@ -48,8 +48,13 @@ Start the livereload server with: ::
 
   $ ./manage.py livereload
 
-Extra files and/or paths to watch for changes can be added as positional arguments. Host and port can be overridden with
-``--host`` and ``port`` options.
+Extra files and/or paths to watch for changes can be added as positional arguments. ::
+
+  $ ./manage.py livereload path/to/my-extra-directory/
+
+Host and port can be overridden with ``--host`` and ``port`` options. ::
+
+  $ ./manage.py livereload --host=myhost.com --port=9090
 
 Start the development server as usual with ``./manage.py runserver``. The command now accepts three additional
 options:
