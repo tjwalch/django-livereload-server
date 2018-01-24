@@ -44,7 +44,7 @@ specify them by setting ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT`` in ``setting
 
 Usage
 -----
-Start the livereload server with: ::
+Start the livereload server. (**NOTE**: This is not a replacement for ``runserver``. See below for more details.) ::
 
   $ ./manage.py livereload
 
