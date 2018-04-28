@@ -23,24 +23,40 @@ class Command(BaseCommand):
         parser.add_argument(
             '--port', dest='port', default=livereload_port(), help='Listening port for livereload sever.'
         )
+        parser.add_argument(
+            '--ignore-template-dirs',
+            dest='ignore-template-dirs',
+            action='store_true',
+            help="Prevent watching template directories",
+        )
+        parser.add_argument(
+            '--ignore-static-dirs',
+            dest='ignore-static-dirs',
+            action='store_true',
+            help="Prevent watching staticfiles directories",
+        )
 
     def handle(self, *args, **options):
         server = S.Server()
+        watch_dirs = options.get('extra', [])
+        app_configs = apps.get_app_configs()
 
-        #  The reason not to ask the staticfile finders to list the files is
-        # to get a watch when new files are added as well
-        for dir in itertools.chain(
-                settings.STATICFILES_DIRS,
-                getattr(settings, 'TEMPLATE_DIRS', []),
-                options.get('extra', []),
-                args):
+        if options['ignore-template-dirs'] is not True:
+            watch_dirs.extend(getattr(settings, 'TEMPLATE_DIRS', []))
+            watch_dirs.extend([template['DIRS']
+                               for template in getattr(settings, 'TEMPLATES', [])])
+            watch_dirs.extend([os.path.join(app_config.path, 'templates')
+                               for app_config in app_configs])
+
+        if options['ignore-static-dirs'] is not True:
+            watch_dirs.extend(getattr(settings, 'STATICFILES_DIRS', []))
+            watch_dirs.extend([os.path.join(app_config.path, 'static')
+                               for app_config in app_configs])
+
+        watch_dirs = list(filter(None, watch_dirs)) # Remove empty lists
+
+        for dir in watch_dirs:
             server.watch(dir)
-        for template in getattr(settings, 'TEMPLATES', []):
-            for dir in template['DIRS']:
-                server.watch(dir)
-        for app_config in apps.get_app_configs():
-            server.watch(os.path.join(app_config.path, 'static'))
-            server.watch(os.path.join(app_config.path, 'templates'))
 
         server.serve(
             host=options['host'],
