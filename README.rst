@@ -50,11 +50,11 @@ Start the livereload server. (**NOTE**: This is not a replacement for ``runserve
 
 By default both template and staticfiles directories are watched.
 
-You can ignore template directories using:
+You can ignore template directories using: ::
 
   $ ./manage.py livereload --ignore-template-dirs
 
-Or staticfiles directories using:
+Or staticfiles directories using: ::
 
   $ ./manage.py livereload --ignore-static-dirs
 
