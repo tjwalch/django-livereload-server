@@ -48,9 +48,22 @@ Start the livereload server. (**NOTE**: This is not a replacement for ``runserve
 
   $ ./manage.py livereload
 
+By default both template and staticfiles directories are watched.
+
+You can ignore template directories using: ::
+
+  $ ./manage.py livereload --ignore-template-dirs
+
+Or staticfiles directories using: ::
+
+  $ ./manage.py livereload --ignore-static-dirs
+
 Extra files and/or paths to watch for changes can be added as positional arguments. By default livereload server watches the files that are found by your staticfiles finders and your template loaders. ::
 
   $ ./manage.py livereload path/to/my-extra-directory/
+
+This will be excluded from the paths ignored by `--ignore-template-dirs` and
+`--ignore-static-dirs`.
 
 Host and port can be overridden with ``--host`` and ``port`` options. ::
 
