@@ -44,9 +44,24 @@ specify them by setting ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT`` in ``setting
 
 Usage
 -----
-Start the livereload server. (**NOTE**: This is not a replacement for ``runserver``. See below for more details.) ::
+Start the livereload server::
 
-  $ ./manage.py livereload
+  $ python manage.py livereload
+
+keep the livereload server running.
+
+Start the django development server as usual (in another console)::
+
+  $ python manage.py runserver
+
+In the browser's address bar access your web app by doing:
+
+  127.0.0.1:8000 or localhost:8000
+
+now every time you hit save in your editor, the django-development-server/livereload-server automatically updates the staticfiles
+
+Customization
+-------------
 
 By default both template and staticfiles directories are watched.
 
@@ -60,17 +75,16 @@ Or staticfiles directories using: ::
 
 Extra files and/or paths to watch for changes can be added as positional arguments. By default livereload server watches the files that are found by your staticfiles finders and your template loaders. ::
 
-  $ ./manage.py livereload path/to/my-extra-directory/
+  $ python manage.py livereload path/to/my-extra-directory/
 
 This will be excluded from the paths ignored by `--ignore-template-dirs` and
 `--ignore-static-dirs`.
 
-Host and port can be overridden with ``--host`` and ``port`` options. ::
+Host and port can be overridden with ``--host`` and ``--port`` options. ::
 
-  $ ./manage.py livereload --host=myhost.com --port=9090
+  $ python manage.py livereload --host=myhost.com --port=9090
 
-Start the development server as usual with ``./manage.py runserver``. The command now accepts three additional
-options:
+the runserver command ``python manage.py runserver`` also accepts three additional options::
 
 * ``--nolivereload`` to disable livereload functionality
 * ``--livereload-host`` to override both default and settings file specified host address
