@@ -43,8 +43,8 @@ class Command(BaseCommand):
 
         if options['ignore-template-dirs'] is not True:
             watch_dirs.extend(getattr(settings, 'TEMPLATE_DIRS', []))
-            watch_dirs.extend([template['DIRS']
-                               for template in getattr(settings, 'TEMPLATES', [])])
+            for template in getattr(settings, 'TEMPLATES', []):
+                watch_dirs.extend(template['DIRS'])
             watch_dirs.extend([os.path.join(app_config.path, 'templates')
                                for app_config in app_configs])
 
@@ -53,9 +53,7 @@ class Command(BaseCommand):
             watch_dirs.extend([os.path.join(app_config.path, 'static')
                                for app_config in app_configs])
 
-        watch_dirs = list(filter(None, watch_dirs)) # Remove empty lists
-
-        for dir in watch_dirs:
+        for dir in filter(None, watch_dirs):
             server.watch(dir)
 
         server.serve(

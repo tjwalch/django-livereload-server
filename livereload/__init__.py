@@ -1,5 +1,5 @@
 """django-livereload"""
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __license__ = 'BSD License'
 
 __author__ = 'Tomas Walch'
