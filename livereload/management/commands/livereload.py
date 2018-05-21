@@ -44,7 +44,8 @@ class Command(BaseCommand):
         if options['ignore-template-dirs'] is not True:
             watch_dirs.extend(getattr(settings, 'TEMPLATE_DIRS', []))
             for template in getattr(settings, 'TEMPLATES', []):
-                watch_dirs.extend(template['DIRS'])
+                if 'DIRS' in template:
+                    watch_dirs.extend(template['DIRS'])
             watch_dirs.extend([os.path.join(app_config.path, 'templates')
                                for app_config in app_configs])
 
