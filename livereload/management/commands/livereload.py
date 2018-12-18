@@ -61,7 +61,7 @@ class Command(BaseCommand):
 
         ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
         for extension in ignore_file_extensions:
-            server.ignore_file_extension(extension)
+            server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
             server.watch(dir)
