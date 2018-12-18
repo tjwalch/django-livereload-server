@@ -75,7 +75,7 @@ Or staticfiles directories using: ::
 
 You can ignore file extensions: ::
 
-  $ ./manage.py livereload --ignore-extensions=.less,.scss
+  $ ./manage.py livereload --ignore-file-extensions=.less,.scss
 
 
 Extra files and/or paths to watch for changes can be added as positional arguments. By default livereload server watches the files that are found by your staticfiles finders and your template loaders. ::

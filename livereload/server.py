@@ -94,7 +94,7 @@ class Server(object):
             watcher = watcher_cls()
         self.watcher = watcher
 
-    def ignore_extension(self, extension):
+    def ignore_file_extension(self, extension):
         """
         Configure a file extension to be ignored.
 
@@ -102,7 +102,7 @@ class Server(object):
                           (ex. .less, .scss, etc)
         """
         logger.info('Ignoring file extension: {}'.format(extension))
-        self.watcher.ignore_extension(extension)
+        self.watcher.ignore_file_extension(extension)
 
     def watch(self, filepath, func=None, delay=None):
         """Add the given filepath for watcher list.

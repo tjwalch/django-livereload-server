@@ -32,15 +32,15 @@ class Watcher(object):
         self._start = time.time()
 
         # ignored file extensions
-        self.ignored_extensions = ['.pyc', '.pyo', '.o', '.swp']
+        self.ignored_file_extensions = ['.pyc', '.pyo', '.o', '.swp']
 
     def should_ignore(self, filename):
         """Should ignore a given filename?"""
         _, ext = os.path.splitext(filename)
-        return ext in self.ignored_extensions
+        return ext in self.ignored_file_extensions
 
-    def ignore_extension(self, extension):
-        self.ignored_extensions.append(extension)
+    def ignore_file_extension(self, extension):
+        self.ignored_file_extensions.append(extension)
 
     def watch(self, path, func=None, delay=0, ignore=None):
         """Add a task to watcher.

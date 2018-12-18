@@ -18,7 +18,7 @@ class Command(BaseCommand):
             help='Extra files or directories to watch',
         )
         parser.add_argument(
-            '--ignore-extensions',
+            '--ignore-file-extensions',
             action='store',
             help='File extensions to ignore',
         )
@@ -59,9 +59,9 @@ class Command(BaseCommand):
             watch_dirs.extend([os.path.join(app_config.path, 'static')
                                for app_config in app_configs])
 
-        ignored_extensions = options.get('ignore_extensions', '').split(',')
-        for extension in ignored_extensions:
-            server.ignore_extension(extension)
+        ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
+        for extension in ignore_file_extensions:
+            server.ignore_file_extension(extension)
 
         for dir in filter(None, watch_dirs):
             server.watch(dir)
