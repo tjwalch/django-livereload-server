@@ -88,10 +88,21 @@ class Server(object):
                     CPU usage.
     """
     def __init__(self, watcher=None):
+        self._setup_logging()
         if not watcher:
             watcher_cls = get_watcher_class()
             watcher = watcher_cls()
         self.watcher = watcher
+
+    def ignore_file_extension(self, extension):
+        """
+        Configure a file extension to be ignored.
+
+        :param extension: file extension to be ignored
+                          (ex. .less, .scss, etc)
+        """
+        logger.info('Ignoring file extension: {}'.format(extension))
+        self.watcher.ignore_file_extension(extension)
 
     def watch(self, filepath, func=None, delay=None):
         """Add the given filepath for watcher list.
@@ -137,7 +148,6 @@ class Server(object):
         :param open_url_delay: open webbrowser after the delay seconds
         """
         host = host or '127.0.0.1'
-        self._setup_logging()
         logger.info('Serving on http://%s:%s' % (host, liveport))
 
         self.application(host, liveport=liveport)

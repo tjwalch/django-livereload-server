@@ -18,6 +18,11 @@ class Command(BaseCommand):
             help='Extra files or directories to watch',
         )
         parser.add_argument(
+            '--ignore-file-extensions',
+            action='store',
+            help='File extensions to ignore',
+        )
+        parser.add_argument(
             '--host', dest='host', default=livereload_host(), help='Host address for livereload sever.'
         )
         parser.add_argument(
@@ -53,6 +58,10 @@ class Command(BaseCommand):
             watch_dirs.extend(getattr(settings, 'STATICFILES_DIRS', []))
             watch_dirs.extend([os.path.join(app_config.path, 'static')
                                for app_config in app_configs])
+
+        ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
+        for extension in ignore_file_extensions:
+            server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
             server.watch(dir)
