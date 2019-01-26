@@ -16,3 +16,19 @@ def livereload_port():
 def livereload_host():
     from django.conf import settings
     return getattr(settings, 'LIVERELOAD_HOST', '127.0.0.1')
+
+
+def livereload_scheme():
+    from django.conf import settings
+    return getattr(settings, 'LIVERELOAD_SCHEME', 'http')
+
+
+def livereload_injection_host():
+    from django.conf import settings
+    return getattr(settings, 'LIVERELOAD_INJECTION_HOST', None)
+
+
+def livereload_injection_port():
+    from django.conf import settings
+    return getattr(settings, 'LIVERELOAD_INJECTION_PORT', None)
+

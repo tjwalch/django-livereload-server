@@ -42,6 +42,16 @@ Configuration
 If you need the livereload server to use a different host and port than the default 127.0.0.1 and 35729,
 specify them by setting ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT`` in ``settings.py``.
 
+By default, injected ``livereload.js`` URL is based on ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT``.
+If you want to use another injection scheme, host, port, then specify belows in ``settings.py``. ::
+    
+    LIVERELOAD_SCHEME='https' (defaul http)
+    LIVERELOAD_INJECTION_HOST='192.168.56.100' (defaul LIVERELOAD_HOST)
+    LIVERELOAD_INJECTION_PORT='35730' (defaul LIVERELOAD_PORT)
+
+This setting is need for https or bridge network enviroment.
+(If you want to use https with django debug server, you need additional program like stunnel)
+
 Usage
 -----
 Start the livereload server::

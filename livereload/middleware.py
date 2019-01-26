@@ -10,7 +10,7 @@ try:
 except ImportError:
     MiddlewareMixin = object
 
-from livereload import livereload_port, livereload_host
+from livereload import livereload_port, livereload_host, livereload_scheme, livereload_injection_host, livereload_injection_port
 
 
 class LiveReloadScript(MiddlewareMixin):
@@ -34,10 +34,24 @@ class LiveReloadScript(MiddlewareMixin):
         if not head:
             return response
 
-        script = soup.new_tag(
-            'script', src='http://%s:%d/livereload.js' % (
-                livereload_host(),
-                livereload_port(),
+        host = livereload_host()
+        if livereload_injection_host() is not None:
+            host = livereload_injection_host()
+
+        port = livereload_port()
+        if livereload_injection_port() is not None:
+            host = livereload_injection_port()
+
+        js_file = 'livereload.js'
+        if livereload_scheme() == 'https':
+            js_file = 'livereload_wss.js'
+
+         script = soup.new_tag(
+            'script', src='%s://%s:%d/%s' % (
+                livereload_scheme(),
+                host,
+                port,
+                js_file,
             )
         )
         head.append(script)
