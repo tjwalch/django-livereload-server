@@ -16,3 +16,8 @@ def livereload_port():
 def livereload_host():
     from django.conf import settings
     return getattr(settings, 'LIVERELOAD_HOST', '127.0.0.1')
+
+
+def livereload_url():
+    from django.conf import settings
+    return getattr(settings, 'LIVERELOAD_URL', None)

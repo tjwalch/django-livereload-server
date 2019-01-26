@@ -41,6 +41,9 @@ Configuration
 -------------
 If you need the livereload server to use a different host and port than the default 127.0.0.1 and 35729,
 specify them by setting ``LIVERELOAD_HOST`` and ``LIVERELOAD_PORT`` in ``settings.py``.
+By default, injected ``livereload.js`` URL is based on ``LIVERELOAD_HOST``.
+If you want to use another URL, then specify ``LIVERELOAD_URL``  in ``settings.py``.
+(When server enviroment is https or bridge network, you may need ``LIVERELOAD_URL``)
 
 Usage
 -----
