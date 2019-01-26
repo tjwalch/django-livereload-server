@@ -1,3 +1,4 @@
 include livereload/vendors/livereload.js
+include livereload/vendors/wss/livereload.js
 include LICENSE
 include README.rst

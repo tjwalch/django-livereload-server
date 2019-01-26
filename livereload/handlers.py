@@ -19,6 +19,8 @@ from tornado import escape
 from tornado.websocket import WebSocketHandler
 from tornado.util import ObjectDict
 
+from livereload import livereload_scheme
+
 logger = logging.getLogger('livereload')
 
 
@@ -137,7 +139,11 @@ class LiveReloadJSHandler(web.RequestHandler):
 
     def get(self):
         self.set_header('Content-Type', 'application/javascript')
-        self.write(resource_string(__name__, 'vendors/livereload.js'))
+
+        if livereload_scheme() == 'http':
+            self.write(resource_string(__name__, 'vendors/livereload.js'))
+        if livereload_scheme() == 'https':
+            self.write(resource_string(__name__, 'vendors/wss/livereload.js'))
 
 
 class ForceReloadHandler(web.RequestHandler):
