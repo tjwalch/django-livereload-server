@@ -135,8 +135,9 @@ class Server(object):
         live_handlers = [
             (r'/livereload', LiveReloadHandler),
             (r'/forcereload', ForceReloadHandler),
-            (r'/livereload.js', LiveReloadJSHandler)
+            (r'/livereload.js', LiveReloadJSHandler),
         ]
+
         live = web.Application(handlers=live_handlers, debug=False)
         live.listen(liveport, address=host)
 

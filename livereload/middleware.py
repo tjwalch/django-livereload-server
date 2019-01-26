@@ -40,18 +40,14 @@ class LiveReloadScript(MiddlewareMixin):
 
         port = livereload_port()
         if livereload_injection_port() is not None:
-            host = livereload_injection_port()
+            port = livereload_injection_port()
 
-        js_file = 'livereload.js'
-        if livereload_scheme() == 'https':
-            js_file = 'livereload_wss.js'
-
-         script = soup.new_tag(
+        script = soup.new_tag(
             'script', src='%s://%s:%d/%s' % (
                 livereload_scheme(),
                 host,
                 port,
-                js_file,
+                'livereload.js',
             )
         )
         head.append(script)
