@@ -59,9 +59,10 @@ class Command(BaseCommand):
             watch_dirs.extend([os.path.join(app_config.path, 'static')
                                for app_config in app_configs])
 
-        ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
-        for extension in ignore_file_extensions:
-            server.ignore_file_extension(extension.strip())
+        if options['ignore_file_extensions']:
+            ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
+            for extension in ignore_file_extensions:
+                server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
             server.watch(dir)
