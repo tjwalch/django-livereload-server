@@ -1,10 +1,10 @@
 """
 Middleware for injecting the live-reload script.
 """
-from bs4 import BeautifulSoup
-
-from django.utils.encoding import smart_str
 from django.conf import settings
+from django.utils.encoding import smart_str
+from django.utils.html import format_html
+
 try:
     from django.utils.deprecation import MiddlewareMixin
 except ImportError:
@@ -19,29 +19,27 @@ class LiveReloadScript(MiddlewareMixin):
     """
 
     def process_response(self, request, response):
-        content_type = response.get('Content-Type', '').split(';')[0].strip().lower()
-        if (not settings.DEBUG or
-                content_type not in ['text/html', 'application/xhtml+xml'] or
-                not hasattr(response, 'content')):
+        content_type = response.get("Content-Type", "").split(";")[0].strip().lower()
+        if (
+            not settings.DEBUG
+            or content_type not in ["text/html", "application/xhtml+xml"]
+            or not hasattr(response, "content")
+        ):
             return response
 
-        soup = BeautifulSoup(
-            smart_str(response.content),
-            'html.parser',
+        content = smart_str(response.content)
+        insertion_point = "</head>"
+        livereload_script_tag = format_html(
+            """<script src="{}:{}/livereload.js"></script>""",
+            livereload_host(),
+            livereload_port(),
         )
-
-        head = getattr(soup, 'head', None)
-        if not head:
-            return response
-
-        script = soup.new_tag(
-            'script', src='http://%s:%d/livereload.js' % (
-                livereload_host(),
-                livereload_port(),
-            )
+        # only insert the livereload_script_tag once
+        insertion_count = 1
+        response.content = content.replace(
+            insertion_point,
+            livereload_script_tag + insertion_point,
+            insertion_count
         )
-        head.append(script)
-
-        response.content = str(soup)
 
         return response
