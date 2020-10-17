@@ -22,6 +22,10 @@ from .handlers import ForceReloadHandler
 from .watcher import get_watcher_class
 from six import string_types, PY3
 
+import asyncio, sys
+if sys.version_info >= (3, 8) and sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 logger = logging.getLogger('livereload')
 
 
