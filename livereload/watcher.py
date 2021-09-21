@@ -138,9 +138,17 @@ class Watcher(object):
         return False
 
     def is_glob_changed(self, path, ignore=None):
-        for f in glob.glob(path):
-            if self.is_file_changed(f, ignore):
-                return True
+        try:
+            for f in glob.glob(path):
+                if self.is_file_changed(f, ignore):
+                    return True
+        except TypeError:
+            """
+            Problem: on every ~10 times for some reason the glob returns Path instead of a string
+            TODO: Rewrite this block to use the python Path alongside string
+            aka pathlib introduced in Python 3.4
+            """
+
         return False
 
 
