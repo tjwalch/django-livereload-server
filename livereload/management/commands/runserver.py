@@ -16,25 +16,45 @@ else:
     from django.core.management.commands.runserver import \
         Command as RunserverCommand
 
-from livereload import livereload_port
-
 
 class Command(RunserverCommand):
     """
     Command for running the development server with LiveReload.
     """
-    option_args = [('--nolivereload',
-                    {'action': 'store_false', 'dest': 'use_livereload', 'default': True,
-                     'help': 'Tells Django to NOT use LiveReload.'}),
-                   ('--livereload-port',
-                    {'action': 'store', 'dest': 'livereload_port', 'type': int,
-                     'default': livereload_port(),
-                     'help': 'Port where LiveReload listen.'})]
+    # Allow a settings option to set the default port
+    livereload_default_port = getattr(settings, 'LIVERELOAD_PORT', '35729')
+    # Allow a settings option to set the default host
+    livereload_default_host = getattr(settings, 'LIVERELOAD_HOST', 'localhost')
 
-    def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
-        for name, kwargs in self.option_args:
-            parser.add_argument(name, **kwargs)
+    if callable(getattr(RunserverCommand, 'add_arguments', None)):
+        def add_arguments(self, parser):
+            super(Command, self).add_arguments(parser)
+            parser.add_argument('--nolivereload', action='store_false',
+                                dest='use_livereload', default=True,
+                                help='Tells Django to NOT use LiveReload.')
+            parser.add_argument('--livereload-port', action='store',
+                                dest='livereload_port',
+                                default=self.livereload_default_port,
+                                help='Port where LiveReload listen.')
+            parser.add_argument('--livereload-host', action='store',
+                                dest='livereload_host',
+                                default=self.livereload_default_host,
+                                help='Host where LiveReload is running.')
+
+    else:
+        option_list = RunserverCommand.option_list + (
+            make_option('--nolivereload', action='store_false',
+                        dest='use_livereload', default=True,
+                        help='Tells Django to NOT use LiveReload.'),
+            make_option('--livereload-port', action='store',
+                        dest='livereload_port',
+                        default=livereload_default_port,
+                        help='Port where LiveReload listen.'),
+            make_option('--livereload-host', action='store',
+                        dest='livereload_host',
+                        default=livereload_default_host,
+                        help='Host where LiveReload is running.'),
+        )
 
     help = 'Starts a lightweight Web server for development with LiveReload.'
 
@@ -50,12 +70,16 @@ class Command(RunserverCommand):
         """
         style = color_style()
         verbosity = int(options['verbosity'])
-        host = 'localhost:%s' % options['livereload_port']
+        host = '%s:%s' % (options['livereload_host'],
+                          options['livereload_port'])
         try:
-            urlopen('http://%s/forcereload' % host)
+            urlopen('http://%s/changed?files=.' % host)
             self.message('LiveReload request emitted.\n',
                          verbosity, style.HTTP_INFO)
-        except IOError:
+        except IOError as e:
+            self.stdout.write(
+                self.style.WARNING('LiveReload exception: %s' % e)
+            )
             pass
 
     def get_handler(self, *args, **options):
