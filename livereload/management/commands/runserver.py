@@ -1,10 +1,6 @@
 """Runserver command with livereload"""
 import threading
-from optparse import make_option
-try:
-    from urllib.request import urlopen
-except ImportError:  # Python 2 fall back
-    from urllib2 import urlopen
+from urllib.request import urlopen
 
 from django.conf import settings
 from django.core.management.color import color_style
