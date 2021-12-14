@@ -64,7 +64,10 @@ class Command(RunserverCommand):
             urlopen('http://%s/forcereload' % host)
             self.message('LiveReload request emitted.\n',
                          verbosity, style.HTTP_INFO)
-        except IOError:
+        except IOError as e:
+            self.stdout.write(
+                self.style.WARNING('LiveReload exception: %s' % e)
+            )
             pass
 
     def get_handler(self, *args, **options):

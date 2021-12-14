@@ -3,12 +3,10 @@ Middleware for injecting the live-reload script.
 """
 from bs4 import BeautifulSoup
 
-from django.utils.encoding import smart_str
 from django.conf import settings
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    MiddlewareMixin = object
+from django.utils.deprecation import MiddlewareMixin
+from django.utils.encoding import smart_str
+
 
 from livereload import livereload_port, livereload_host
 
