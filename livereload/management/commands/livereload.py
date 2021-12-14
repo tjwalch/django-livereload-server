@@ -1,41 +1,43 @@
 import os
-from django.conf import settings
-from django.apps import apps
-from django.core.management.base import BaseCommand
-import itertools
-from livereload.server import Server
-from livereload import livereload_port
+import re
+from django.core.management.base import BaseCommand, CommandError
+from django.core.management.commands.runserver import naiveip_re
+from django.core.servers.basehttp import get_internal_wsgi_application
+from livereload import Server
 
 
 class Command(BaseCommand):
-    help = 'Runs a livereload server watching static files and templates.'
+    help = 'Runs the development server with livereload enabled.'
 
     def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
-        parser.add_argument(
-            'extra',
-            nargs='*',
-            action='store',
-            help='Extra files or directories to watch',
-        )
+        parser.add_argument('addrport',
+                            nargs='?',
+                            default='127.0.0.1:8000',
+                            help='host and optional port the django server should listen on (default: 127.0.0.1:8000)')
+        parser.add_argument('-l', '--liveport',
+                            type=int,
+                            default=35729,
+                            help='port the livereload server should listen on (default: 35729)')
 
     def handle(self, *args, **options):
-        server = Server()
+        m = re.match(naiveip_re, options['addrport'])
+        if m is None:
+            raise CommandError('"%s" is not a valid port number '
+                               'or address:port pair.' % options['addrport'])
+        addr, _ipv4, _ipv6, _fqdn, port = m.groups()
+        if not port.isdigit():
+            raise CommandError("%r is not a valid port number." % port)
 
-        for dir in itertools.chain(
-                settings.STATICFILES_DIRS,
-                getattr(settings, 'TEMPLATE_DIRS', []),
-                options.get('extra', []),
-                args):
-            server.watch(dir)
-        for template in getattr(settings, 'TEMPLATES', []):
-            for dir in template['DIRS']:
-                server.watch(dir)
-        for app_config in apps.get_app_configs():
-            server.watch(os.path.join(app_config.path, 'static'))
-            server.watch(os.path.join(app_config.path, 'templates'))
+        if addr:
+            if _ipv6:
+                raise CommandError('IPv6 addresses are currently not supported.')
 
-        server.serve(
-            host='127.0.0.1',
-            liveport=livereload_port(),
-        )
+
+        application = get_internal_wsgi_application()
+        server = Server(application)
+
+        for file in os.listdir('.'):
+            if file[0] != '.' and file[:2] != '__' and os.path.isdir(file):
+                server.watch(file)
+
+        server.serve(host=addr, port=port, liveport=options['liveport'])
