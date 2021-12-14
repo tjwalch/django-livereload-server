@@ -6,7 +6,7 @@ from livereload import livereload_host, livereload_port
 register = template.Library()
 
 @register.simple_tag
-def livereload_script_tag():
+def livereload_script():
     if settings.DEBUG:
         return format_html(
         """<script src="{}:{}/livereload.js"></script>""",
