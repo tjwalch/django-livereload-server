@@ -55,7 +55,7 @@ Start the django development server as usual (in another console)::
 
   $ python manage.py runserver
 
-In the browser's address bar access your web app by doing:
+In the browser's address bar access your web app by doing::
 
   127.0.0.1:8000 or localhost:8000
 
