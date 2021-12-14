@@ -61,6 +61,8 @@ class Command(BaseCommand):
         if options['ignore_file_extensions']:
             ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
             for extension in ignore_file_extensions:
+                if not extension.startswith('.'):
+                    extension = f'.{extension}'
                 server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
