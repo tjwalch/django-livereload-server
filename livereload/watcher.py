@@ -27,8 +27,8 @@ class Watcher(object):
         # setting changes
         self._changes = []
 
-        # filepath that is changed
-        self.filepath = None
+        # filepaths that are changed
+        self.filepaths = []
         self._start = time.time()
 
         # ignored file extensions
@@ -69,8 +69,8 @@ class Watcher(object):
         if self._changes:
             return self._changes.pop()
 
-        # clean filepath
-        self.filepath = None
+        # clean filepaths
+        self.filepaths = []
         delays = set([0])
         for path in self._tasks:
             item = self._tasks[path]
@@ -85,7 +85,7 @@ class Watcher(object):
             delay = 'forever'
         else:
             delay = max(delays)
-        return self.filepath, delay
+        return self.filepaths, delay
 
     def is_changed(self, path, ignore=None):
         if isinstance(path, (list, tuple)):
@@ -110,18 +110,19 @@ class Watcher(object):
 
         if path not in self._mtimes:
             self._mtimes[path] = mtime
-            self.filepath = path
+            self.filepaths.append(path)
             return mtime > self._start
 
         if self._mtimes[path] != mtime:
             self._mtimes[path] = mtime
-            self.filepath = path
+            self.filepaths.append(path)
             return True
 
         self._mtimes[path] = mtime
         return False
 
     def is_folder_changed(self, path, ignore=None):
+        change = False
         for root, dirs, files in os.walk(path, followlinks=True):
             if '.git' in dirs:
                 dirs.remove('.git')
@@ -134,8 +135,8 @@ class Watcher(object):
 
             for f in files:
                 if self.is_file_changed(os.path.join(root, f), ignore):
-                    return True
-        return False
+                    change = True
+        return change
 
     def is_glob_changed(self, path, ignore=None):
         try:
