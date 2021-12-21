@@ -157,7 +157,7 @@ class Server(object):
         self.application(host, liveport=liveport)
 
         try:
-            self.watcher._changes.append(('__livereload__', restart_delay))
+            self.watcher._changes.append((['__livereload__'], restart_delay))
             LiveReloadHandler.start_tasks()
             IOLoop.instance().start()
         except KeyboardInterrupt:
