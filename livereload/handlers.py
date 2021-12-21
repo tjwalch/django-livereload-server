@@ -76,8 +76,10 @@ class LiveReloadHandler(WebSocketHandler):
         if time.time() - cls._last_reload_time < reload_time:
             # if you changed lot of files in one time
             # it will refresh too many times
-            for filepath in filepaths:
-                logger.info('Ignore: %s', filepath)
+            if len(filepaths) == 1:
+                logger.info('Ignore: %s', filepaths[0])
+            else:
+                logger.info('Ignore: %s files', len(filepaths))
             return
         if delay:
             loop = ioloop.IOLoop.current()
