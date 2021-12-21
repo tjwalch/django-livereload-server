@@ -89,11 +89,18 @@ class LiveReloadHandler(WebSocketHandler):
 
     @classmethod
     def reload_waiters(cls, path=None):
-        logger.info(
-            'Reload %s waiters: %s files modified',
-            len(cls.waiters),
-            len(cls.watcher.filepaths),
-        )
+        if len(cls.watcher.filepaths) == 1:
+            logger.info(
+                'Reload %s waiters: %s',
+                len(cls.waiters),
+                cls.watcher.filepaths[0],
+            )
+        else: 
+            logger.info(
+                'Reload %s waiters: %s files modified',
+                len(cls.waiters),
+                len(cls.watcher.filepaths),
+            )
 
         if path is None:
             if len(cls.watcher.filepaths) == 1:
