@@ -65,20 +65,23 @@ class LiveReloadHandler(WebSocketHandler):
 
     @classmethod
     def poll_tasks(cls):
-        filepath, delay = cls.watcher.examine()
-        if not filepath or delay == 'forever' or not cls.waiters:
+        filepaths, delay = cls.watcher.examine()
+        if len(filepaths) == 0 or delay == 'forever' or not cls.waiters:
             return
         reload_time = 3
 
         if delay:
-            reload_time = max(3 - delay, 1)
-        if filepath == '__livereload__':
+            reload_time = max(reload_time - delay, 1)
+        if '__livereload__' in filepaths:
             reload_time = 0
 
         if time.time() - cls._last_reload_time < reload_time:
             # if you changed lot of files in one time
             # it will refresh too many times
-            logger.info('Ignore: %s', filepath)
+            if len(filepaths) == 1:
+                logger.info('Ignore: %s', filepaths[0])
+            else:
+                logger.info('Ignore: %s files', len(filepaths))
             return
         if delay:
             loop = ioloop.IOLoop.current()
@@ -88,14 +91,24 @@ class LiveReloadHandler(WebSocketHandler):
 
     @classmethod
     def reload_waiters(cls, path=None):
-        logger.info(
-            'Reload %s waiters: %s',
-            len(cls.waiters),
-            cls.watcher.filepath,
-        )
+        if len(cls.watcher.filepaths) == 1:
+            logger.info(
+                'Reload %s waiters: %s',
+                len(cls.waiters),
+                cls.watcher.filepaths[0],
+            )
+        else: 
+            logger.info(
+                'Reload %s waiters: %s files modified',
+                len(cls.waiters),
+                len(cls.watcher.filepaths),
+            )
 
         if path is None:
-            path = cls.watcher.filepath or '*'
+            if len(cls.watcher.filepaths) == 1:
+                path = cls.watcher.filepaths[0]
+            else:
+                path = '*'
 
         msg = {
             'command': 'reload',

@@ -357,7 +357,7 @@ class Server:
             threading.Thread(target=opener).start()
 
         try:
-            self.watcher._changes.append(('__livereload__', restart_delay))
+            self.watcher._changes.append((['__livereload__'], restart_delay))
             LiveReloadHandler.start_tasks()
             add_reload_hook(lambda: IOLoop.instance().close(all_fds=True))
             IOLoop.instance().start()

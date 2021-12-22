@@ -35,8 +35,8 @@ class Watcher:
         # setting changes
         self._changes = []
 
-        # filepath that is changed
-        self.filepath = None
+        # filepaths that are changed
+        self.filepaths = []
         self._start = time.time()
 
         # list of ignored dirs
@@ -91,8 +91,8 @@ class Watcher:
         if self._changes:
             return self._changes.pop()
 
-        # clean filepath
-        self.filepath = None
+        # clean filepaths
+        self.filepaths = []
         delays = set()
         for path in self._tasks:
             item = self._tasks[path]
@@ -118,7 +118,7 @@ class Watcher:
             delay = max(delays)
         else:
             delay = None
-        return self.filepath, delay
+        return self.filepaths, delay
 
     def is_changed(self, path, ignore=None):
         """Check if any filepaths have been added, modified, or removed.
@@ -180,12 +180,12 @@ class Watcher:
 
         if path not in self._task_mtimes:
             self._new_mtimes[path] = mtime
-            self.filepath = path
+            self.filepaths.append(path)
             return mtime > self._start
 
         if self._task_mtimes[path] != mtime:
             self._new_mtimes[path] = mtime
-            self.filepath = path
+            self.filepaths.append(path)
             return True
 
         self._new_mtimes[path] = mtime
@@ -193,6 +193,7 @@ class Watcher:
 
     def is_folder_changed(self, path, ignore=None):
         """Check if directory path has any changed filepaths."""
+        change = False
         for root, dirs, files in os.walk(path, followlinks=True):
             for d in self.ignored_dirs:
                 if d in dirs:
@@ -200,8 +201,8 @@ class Watcher:
 
             for f in files:
                 if self.is_file_changed(os.path.join(root, f), ignore):
-                    return True
-        return False
+                    change = True
+        return change
 
     def get_changed_glob_files(self, path, ignore=None):
         """Check if glob path has any changed filepaths."""
