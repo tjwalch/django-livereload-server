@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
-            server.watch(dir)
+            server.watch(str(dir))  # Watcher can only handle strings, not Path objects
 
         server.serve(
             host=options['host'],
