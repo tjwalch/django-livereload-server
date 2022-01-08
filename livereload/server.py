@@ -19,9 +19,8 @@ from subprocess import Popen, PIPE
 from tornado.wsgi import WSGIContainer
 from tornado.ioloop import IOLoop
 from tornado.autoreload import add_reload_hook
-from tornado import web
-from tornado import escape
-from tornado import httputil
+from tornado import web, escape , httputil
+
 from tornado.log import LogFormatter
 from .handlers import LiveReloadHandler, LiveReloadJSHandler
 from .handlers import ForceReloadHandler, StaticFileHandler
