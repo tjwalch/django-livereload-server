@@ -1,6 +1,7 @@
 """
 Middleware for injecting the live-reload script.
 """
+import logging
 from bs4 import BeautifulSoup
 
 from django.conf import settings
@@ -10,6 +11,7 @@ from django.utils.encoding import smart_str
 
 from livereload import livereload_port, livereload_host
 
+logger = logging.getLogger("django.server")
 
 class LiveReloadScript(MiddlewareMixin):
     """
@@ -30,6 +32,7 @@ class LiveReloadScript(MiddlewareMixin):
 
         head = getattr(soup, 'head', None)
         if not head:
+            logger.info("No head tag found. Live-reload script not injected.")
             return response
 
         script = soup.new_tag(

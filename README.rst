@@ -36,7 +36,7 @@ Next you need to inject the loading of the livereload javascript. You can do thi
     {% livereload_script %}
     </head>
 
-Either of these options will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on.
+Either of these options will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on and a head tag is present.
 
 Configuration
 -------------
