@@ -26,7 +26,7 @@ class LiveReloadScript(MiddlewareMixin):
         content = smart_str(response.content)
         insertion_point = "</head>"
         livereload_script_tag = format_html(
-            """<script src="{}:{}/livereload.js"></script>""",
+            """<script src="http://{}:{}/livereload.js"></script>""",
             livereload_host(),
             livereload_port(),
         )
