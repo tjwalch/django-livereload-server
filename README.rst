@@ -20,22 +20,23 @@ Add ``'livereload'`` to the ``INSTALLED_APPS``, before ``'django.contrib.staticf
         ...
     )
 
-Add ``'livereload.middleware.LiveReloadScript'`` to
-``MIDDLEWARE_CLASSES`` (probably at the end)::
+Next you need to inject the loading of the livereload javascript. You can do this in one of two ways:
+
+* Through middleware by adding  ``'livereload.middleware.LiveReloadScript'`` to ``MIDDLEWARE_CLASSES`` (probably at the end)::
 
     MIDDLEWARE_CLASSES = (
         ...
         'livereload.middleware.LiveReloadScript',
     )
 
-Or to ``MIDDLEWARE`` for Django >= 1.10::
+* Through a templatetag in your ``base.html`` (or similar) template::
 
-    MIDDLEWARE = [
-        ...
-        'livereload.middleware.LiveReloadScript',
-    ]
+    {% load livereload_tags %}
+    ...
+    {% livereload_script %}
+    </head>
 
-This will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on.
+Either of these options will inject the ``livereload.js`` script into your webpages if ``DEBUG`` setting is on.
 
 Configuration
 -------------
@@ -54,7 +55,7 @@ Start the django development server as usual (in another console)::
 
   $ python manage.py runserver
 
-In the browser's address bar access your web app by doing:
+In the browser's address bar access your web app by doing::
 
   127.0.0.1:8000 or localhost:8000
 

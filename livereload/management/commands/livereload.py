@@ -1,5 +1,4 @@
 import os
-import itertools
 from django.conf import settings
 from django.apps import apps
 from django.core.management.base import BaseCommand
@@ -59,12 +58,15 @@ class Command(BaseCommand):
             watch_dirs.extend([os.path.join(app_config.path, 'static')
                                for app_config in app_configs])
 
-        ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
-        for extension in ignore_file_extensions:
-            server.ignore_file_extension(extension.strip())
+        if options['ignore_file_extensions']:
+            ignore_file_extensions = options.get('ignore_file_extensions', '').split(',')
+            for extension in ignore_file_extensions:
+                if not extension.startswith('.'):
+                    extension = f'.{extension}'
+                server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
-            server.watch(dir)
+            server.watch(str(dir))  # Watcher can only handle strings, not Path objects
 
         server.serve(
             host=options['host'],

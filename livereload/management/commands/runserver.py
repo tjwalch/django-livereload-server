@@ -1,10 +1,6 @@
 """Runserver command with livereload"""
 import threading
-from optparse import make_option
-try:
-    from urllib.request import urlopen
-except ImportError:  # Python 2 fall back
-    from urllib2 import urlopen
+from urllib.request import urlopen
 
 from django.conf import settings
 from django.core.management.color import color_style
@@ -64,7 +60,10 @@ class Command(RunserverCommand):
             urlopen('http://%s/forcereload' % host)
             self.message('LiveReload request emitted.\n',
                          verbosity, style.HTTP_INFO)
-        except IOError:
+        except IOError as e:
+            self.stdout.write(
+                self.style.WARNING('LiveReload exception: %s' % e)
+            )
             pass
 
     def get_handler(self, *args, **options):
