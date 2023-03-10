@@ -9,7 +9,7 @@ register = template.Library()
 def livereload_script():
     if settings.DEBUG:
         return format_html(
-        """<script src="{}:{}/livereload.js"></script>""",
+        """<script src="http://{}:{}/livereload.js"></script>""",
         livereload_host(),
         livereload_port(),
     )
