@@ -22,9 +22,9 @@ Add ``'livereload'`` to the ``INSTALLED_APPS``, before ``'django.contrib.staticf
 
 Next you need to inject the loading of the livereload javascript. You can do this in one of two ways:
 
-* Through middleware by adding  ``'livereload.middleware.LiveReloadScript'`` to ``MIDDLEWARE_CLASSES`` (probably at the end)::
+* Through middleware by adding  ``'livereload.middleware.LiveReloadScript'`` to ``MIDDLEWARE`` (probably at the end)::
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         ...
         'livereload.middleware.LiveReloadScript',
     )
