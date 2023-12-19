@@ -39,7 +39,7 @@ class LiveReloadScript(MiddlewareMixin):
         response.content = content.replace(
             insertion_point,
             livereload_script_tag + insertion_point,
-            insertion_count
+            insertion_count,
         )
 
         return response
