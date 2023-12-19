@@ -73,5 +73,5 @@ class Command(BaseCommand):
 
         server.serve(
             host=options['host'],
-            liveport=options['port'],
+            port=options['port'],
         )

@@ -2,11 +2,15 @@
 Middleware for injecting the live-reload script.
 """
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
 from django.utils.encoding import smart_str
 from django.utils.html import format_html
 
-from livereload import livereload_host, livereload_port
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
+
+from livereload import livereload_port, livereload_host
 
 
 class LiveReloadScript(MiddlewareMixin):
