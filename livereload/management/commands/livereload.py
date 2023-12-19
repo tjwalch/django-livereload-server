@@ -39,6 +39,9 @@ class Command(BaseCommand):
             action='store_true',
             help="Prevent watching staticfiles directories",
         )
+        parser.add_argument(
+            '-w', '--wait', dest='delay', type=float, default=0, help='Delay before reloading page in seconds'
+        )
 
     def handle(self, *args, **options):
         server = S.Server()
@@ -66,7 +69,7 @@ class Command(BaseCommand):
                 server.ignore_file_extension(extension.strip())
 
         for dir in filter(None, watch_dirs):
-            server.watch(str(dir))  # Watcher can only handle strings, not Path objects
+            server.watch(str(dir), delay=options['delay'])  # Watcher can only handle strings, not Path objects
 
         server.serve(
             host=options['host'],
